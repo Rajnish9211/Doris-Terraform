@@ -1,5 +1,8 @@
 # Private SSH and certificate keys
 *.pem
+*.pem:Zone.Identifier
+doris_openssh.pub
+doris_public.pem
 
 # Terraform generated directories and state
 .terraform/
