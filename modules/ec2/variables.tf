@@ -1,3 +1,9 @@
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Enable or disable this EC2 module"
+}
+
 variable "ec2_instances" {
   type = map(object({
     ami_id                 = string
@@ -16,37 +22,49 @@ variable "ec2_instances" {
     iam_instance_profile   = optional(string)
     tags                   = map(string)
   }))
-}
-
-variable "security_groups" {
-  type = list(string)
+  description = "EC2 instance configuration map"
 }
 
 variable "vpc_id" {
-  type = string
+  type        = string
+  description = "VPC ID where security groups exist"
 }
 
-variable "route_table_ids" {
-  type = list(string)
+variable "security_group_names" {
+  type        = list(string)
+  default     = []
+  description = "Existing security group names to attach to EC2 instances"
 }
 
-variable "firewall_eni_id" {
-  type = string
-}
-
-variable "security_group_ports" {
+variable "security_group_ingress_rules" {
   type = map(object({
-    from_port   = number
-    to_port     = number
-    protocol    = string
-    name_regex  = string
+    from_port  = number
+    to_port    = number
+    protocol   = string
+    name_regex = string
   }))
+  default     = {}
+  description = "Optional security group ingress rules"
+}
+
+variable "security_group_egress_rules" {
+  type = map(object({
+    from_port  = number
+    to_port    = number
+    protocol   = string
+    cidr_blocks = optional(list(string), ["0.0.0.0/0"])
+    name_regex = string
+  }))
+  default     = {}
+  description = "Optional security group egress rules"
 }
 
 variable "extra_volumes" {
   type = map(list(object({
     device_name = string
     size        = number
+    volume_type = optional(string, "gp3")
   })))
-  default = {}
+  default     = {}
+  description = "Additional EBS volumes to attach to instances"
 }
