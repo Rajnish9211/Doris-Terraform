@@ -1,5 +1,10 @@
+# Private SSH and certificate keys
 *.pem
+
+# Terraform generated directories and state
 .terraform/
 *.tfstate
 *.tfstate.backup
+
+# Terraform lock file (optional to track, but ignored here per repo policy)
 .terraform.lock.hcl
