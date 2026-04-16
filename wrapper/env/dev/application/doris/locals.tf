@@ -22,7 +22,7 @@ locals {
       delete_on_termination = true
 
       enable_eip             = false
-      termination_protection = true
+      termination_protection = false
 
       tags = merge(local.common_tags, {
         role = "frontend"
@@ -45,7 +45,7 @@ locals {
       delete_on_termination = true
 
       enable_eip             = false
-      termination_protection = true
+      termination_protection = false
 
       tags = merge(local.common_tags, {
         role = "frontend"
@@ -68,7 +68,7 @@ locals {
       delete_on_termination = true
 
       enable_eip             = false
-      termination_protection = true
+      termination_protection = false
 
       tags = merge(local.common_tags, {
         role = "frontend"
@@ -91,7 +91,7 @@ locals {
       delete_on_termination = true
 
       enable_eip             = false
-      termination_protection = true
+      termination_protection = false
 
       tags = merge(local.common_tags, {
         role = "backend"
@@ -114,7 +114,7 @@ locals {
       delete_on_termination = true
 
       enable_eip             = false
-      termination_protection = true
+      termination_protection = false
 
       tags = merge(local.common_tags, {
         role = "backend"
@@ -137,7 +137,7 @@ locals {
       delete_on_termination = true
 
       enable_eip             = false
-      termination_protection = true
+      termination_protection = false
 
       tags = merge(local.common_tags, {
         role = "backend"
