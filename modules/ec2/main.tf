@@ -57,49 +57,25 @@ resource "aws_instance" "ec2" {
 }
 
 resource "aws_security_group_rule" "ingress_rules" {
-  for_each = var.enabled ? {
-    for pair in flatten([
-      for rule_key, rule_value in var.security_group_ingress_rules : [
-        for sg_name in var.security_group_names : {
-          rule_name = rule_key
-          sg_id     = data.aws_security_group.sg[sg_name].id
-          sg_name   = sg_name
-          rule      = rule_value
-        }
-        if can(regex(rule_value.name_regex, sg_name))
-      ]
-    ]) : "${pair.rule_name}-${pair.sg_name}" => pair
-  } : {}
+  for_each = var.enabled ? var.security_group_ingress_rules : {}
 
   type              = "ingress"
-  from_port         = each.value.rule.from_port
-  to_port           = each.value.rule.to_port
-  protocol          = each.value.rule.protocol
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = each.value.sg_id
+  from_port         = each.value.from_port
+  to_port           = each.value.to_port
+  protocol          = each.value.protocol
+  cidr_blocks       = each.value.cidr_blocks
+  security_group_id = data.aws_security_group.sg[each.value.sg_name].id
 }
 
 resource "aws_security_group_rule" "egress_rules" {
-  for_each = var.enabled ? {
-    for pair in flatten([
-      for rule_key, rule_value in var.security_group_egress_rules : [
-        for sg_name in var.security_group_names : {
-          rule_name = rule_key
-          sg_id     = data.aws_security_group.sg[sg_name].id
-          sg_name   = sg_name
-          rule      = rule_value
-        }
-        if can(regex(rule_value.name_regex, sg_name))
-      ]
-    ]) : "${pair.rule_name}-${pair.sg_name}" => pair
-  } : {}
+  for_each = var.enabled ? var.security_group_egress_rules : {}
 
   type              = "egress"
-  from_port         = each.value.rule.from_port
-  to_port           = each.value.rule.to_port
-  protocol          = each.value.rule.protocol
-  cidr_blocks       = each.value.rule.cidr_blocks
-  security_group_id = each.value.sg_id
+  from_port         = each.value.from_port
+  to_port           = each.value.to_port
+  protocol          = each.value.protocol
+  cidr_blocks       = each.value.cidr_blocks
+  security_group_id = data.aws_security_group.sg[each.value.sg_name].id
 }
 
 resource "aws_ebs_volume" "extra" {

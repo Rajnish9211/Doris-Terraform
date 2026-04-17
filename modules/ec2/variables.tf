@@ -38,25 +38,26 @@ variable "security_group_names" {
 
 variable "security_group_ingress_rules" {
   type = map(object({
-    from_port  = number
-    to_port    = number
-    protocol   = string
-    name_regex = string
-  }))
-  default     = {}
-  description = "Optional security group ingress rules"
-}
-
-variable "security_group_egress_rules" {
-  type = map(object({
+    sg_name    = string
     from_port  = number
     to_port    = number
     protocol   = string
     cidr_blocks = optional(list(string), ["0.0.0.0/0"])
-    name_regex = string
   }))
   default     = {}
-  description = "Optional security group egress rules"
+  description = "Ingress rules with target security group names"
+}
+
+variable "security_group_egress_rules" {
+  type = map(object({
+    sg_name     = string
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = optional(list(string), ["0.0.0.0/0"])
+  }))
+  default     = {}
+  description = "Egress rules with target security group names"
 }
 
 variable "extra_volumes" {
